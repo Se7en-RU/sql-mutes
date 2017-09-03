@@ -8,7 +8,7 @@
 public Plugin myinfo = {
 	name = "SQL Mutes",
 	author = "Se7en",
-	version = "1.0",
+	version = "1.1",
 	url = "https://csgo.su"
 }
 
@@ -38,6 +38,9 @@ public void OnPluginStart() {
 	if (!g_RemoveMuteQuery) {
 		SetFailState("Could not create prepared statement g_RemoveMuteQuery: %s", error);
 	}
+	
+	HookEvent("cs_match_end_restart", RestartRound);
+
 }
 
 public void OnPluginEnd() {
@@ -45,7 +48,13 @@ public void OnPluginEnd() {
 	delete g_RemoveMuteQuery;
 }
 
-public void OnMapEnd() {
+public void OnMap() {
+	if (g_Database) {
+		SQL_FastQuery(g_Database, "DELETE FROM 'mutes';");
+	}
+}
+
+public Action RestartRound(Handle event, const char[] name, bool dbc) {
 	if (g_Database) {
 		SQL_FastQuery(g_Database, "DELETE FROM 'mutes';");
 	}
