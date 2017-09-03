@@ -48,7 +48,7 @@ public void OnPluginEnd() {
 	delete g_RemoveMuteQuery;
 }
 
-public void OnMap() {
+public void OnMapEnd() {
 	if (g_Database) {
 		SQL_FastQuery(g_Database, "DELETE FROM 'mutes';");
 	}
